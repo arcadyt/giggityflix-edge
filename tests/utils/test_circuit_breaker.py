@@ -8,7 +8,7 @@ from giggityflix_edge.utils.circuit_breaker import (
 )
 
 
-@pytest.mark.skip
+@pytest.mark.skip(reason="Skip until implementation is complete")
 class TestCircuitBreaker:
 
     def test_circuit_state_enum(self):
@@ -20,7 +20,7 @@ class TestCircuitBreaker:
     def test_get_circuit_breaker_new(self):
         """Test getting a new circuit breaker."""
         # Setup - ensure we're starting with a clean registry
-        with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
             # Execute
             circuit = get_circuit_breaker("test_circuit")
 
@@ -37,7 +37,7 @@ class TestCircuitBreaker:
     def test_get_circuit_breaker_existing(self):
         """Test getting an existing circuit breaker."""
         # Setup - create a circuit first
-        with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
             circuit1 = get_circuit_breaker("test_circuit")
 
             # Execute - get the same circuit again
@@ -49,7 +49,7 @@ class TestCircuitBreaker:
     def test_get_circuit_breaker_custom_params(self):
         """Test getting a circuit breaker with custom parameters."""
         # Setup - ensure we're starting with a clean registry
-        with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
             # Execute
             circuit = get_circuit_breaker(
                 "test_circuit",
@@ -75,7 +75,7 @@ class TestCircuitBreaker:
     def test_get_circuit_breaker_with_listener(self):
         """Test that a circuit breaker gets a listener."""
         # Setup - ensure we're starting with a clean registry
-        with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
             # Execute
             circuit = get_circuit_breaker("test_circuit")
 
@@ -89,7 +89,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test async function with the decorator
             @circuit_protected("test_circuit")
             async def test_func(arg1, arg2=None):
@@ -112,7 +112,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test sync function with the decorator
             @circuit_protected("test_circuit")
             def test_func(arg1, arg2=None):
@@ -136,7 +136,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test async function with the decorator
             @circuit_protected("test_circuit")
             async def test_func():
@@ -158,7 +158,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test async function with the decorator
             @circuit_protected("test_circuit")
             async def test_func():
@@ -180,7 +180,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test async function
             async def test_func(arg1, arg2=None):
                 return f"{arg1}-{arg2}"
@@ -203,7 +203,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test sync function
             def test_func(arg1, arg2=None):
                 return f"{arg1}-{arg2}"
@@ -226,7 +226,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test function that raises an exception
             def test_func():
                 raise ValueError("Test error")
@@ -247,7 +247,7 @@ class TestCircuitBreaker:
         # Setup
         mock_circuit = MagicMock()
 
-        with patch('src.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
+        with patch('giggityflix_edge.utils.circuit_breaker.get_circuit_breaker', return_value=mock_circuit):
             # Define a test function
             def test_func():
                 return "success"
@@ -269,8 +269,8 @@ class TestCircuitBreakerListener:
     def test_listener_state_change(self):
         """Test listener state_change method."""
         # Setup
-        with patch('src.utils.circuit_breaker.logger') as mock_logger:
-            with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.logger') as mock_logger:
+            with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
                 # Get a circuit breaker with its listener
                 circuit = get_circuit_breaker("test_circuit")
                 listener = circuit.listeners[0]
@@ -286,8 +286,8 @@ class TestCircuitBreakerListener:
     def test_listener_failure(self):
         """Test listener failure method."""
         # Setup
-        with patch('src.utils.circuit_breaker.logger') as mock_logger:
-            with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.logger') as mock_logger:
+            with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
                 # Get a circuit breaker with its listener
                 circuit = get_circuit_breaker("test_circuit")
                 listener = circuit.listeners[0]
@@ -303,8 +303,8 @@ class TestCircuitBreakerListener:
     def test_listener_success_closed(self):
         """Test listener success method when circuit is closed."""
         # Setup
-        with patch('src.utils.circuit_breaker.logger') as mock_logger:
-            with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.logger') as mock_logger:
+            with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
                 # Get a circuit breaker with its listener
                 circuit = get_circuit_breaker("test_circuit")
                 listener = circuit.listeners[0]
@@ -323,8 +323,8 @@ class TestCircuitBreakerListener:
     def test_listener_success_not_closed(self):
         """Test listener success method when circuit is half-open."""
         # Setup
-        with patch('src.utils.circuit_breaker.logger') as mock_logger:
-            with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
+        with patch('giggityflix_edge.utils.circuit_breaker.logger') as mock_logger:
+            with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS', {}):
                 # Get a circuit breaker with its listener
                 circuit = get_circuit_breaker("test_circuit")
                 listener = circuit.listeners[0]

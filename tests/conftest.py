@@ -1,14 +1,40 @@
 import json
-# Mock protobuf modules until we generate them
 import sys
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-sys.modules['giggityflix_protos'] = MagicMock()
-sys.modules['giggityflix_protos.peer_edge_pb2'] = MagicMock()
-sys.modules['giggityflix_protos.peer_edge_pb2_grpc'] = MagicMock()
+# Create mock pb2 module with message classes
+mock_pb2 = MagicMock()
+mock_pb2.EdgeMessage = MagicMock
+mock_pb2.PeerMessage = MagicMock
+mock_pb2.PeerRegistrationRequest = MagicMock
+mock_pb2.PeerRegistrationResponse = MagicMock
+mock_pb2.FileDeleteRequest = MagicMock
+mock_pb2.FileDeleteResponse = MagicMock
+mock_pb2.FileHashRequest = MagicMock
+mock_pb2.FileHashResponse = MagicMock
+mock_pb2.BatchFileOfferRequest = MagicMock
+mock_pb2.BatchFileOfferResponse = MagicMock
+mock_pb2.FileRemapRequest = MagicMock
+mock_pb2.ScreenshotCaptureRequest = MagicMock
+mock_pb2.ScreenshotCaptureResponse = MagicMock
+mock_pb2.ScreenshotData = MagicMock
+mock_pb2.FileOfferItem = MagicMock
+mock_pb2.FileOfferResult = MagicMock
+
+# Create mock pb2_grpc module with service classes
+mock_pb2_grpc = MagicMock()
+mock_pb2_grpc.PeerEdgeServiceServicer = MagicMock
+mock_pb2_grpc.add_PeerEdgeServiceServicer_to_server = MagicMock()
+
+# Register mocks in sys.modules
+sys.modules['giggityflix_grpc_peer'] = MagicMock()
+sys.modules['giggityflix_grpc_peer.generated'] = MagicMock()
+sys.modules['giggityflix_grpc_peer.generated.peer_edge'] = MagicMock()
+sys.modules['giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2'] = mock_pb2
+sys.modules['giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2_grpc'] = mock_pb2_grpc
 
 from giggityflix_edge.stream_manager import StreamManager
 from giggityflix_edge.message_handler import MessageHandler

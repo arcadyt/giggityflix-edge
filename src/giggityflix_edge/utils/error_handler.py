@@ -11,7 +11,7 @@ import random
 import time
 from typing import Any, Callable, Optional, Type, TypeVar, cast
 
-from ..config import config
+from giggityflix_edge.config import config
 
 logger = logging.getLogger(__name__)
 

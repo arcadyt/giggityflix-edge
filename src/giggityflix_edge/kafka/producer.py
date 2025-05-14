@@ -5,7 +5,7 @@ from typing import Dict, Any, List, Optional
 
 from confluent_kafka import Producer
 
-from ..config import config
+from giggityflix_edge.config import config
 
 logger = logging.getLogger(__name__)
 

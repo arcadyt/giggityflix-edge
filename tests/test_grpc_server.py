@@ -270,7 +270,7 @@ class TestGrpcServer:
         request_iterator = AsyncIteratorMock([mock_peer_message, unknown_message])
 
         # Execute
-        with patch('src.grpc_server.logger') as mock_logger:
+        with patch('giggityflix_edge.grpc_server.logger') as mock_logger:
             response_generator = servicer.message(request_iterator, mock_grpc_context)
             responses = [r async for r in response_generator]
 
@@ -295,7 +295,7 @@ class TestGrpcServer:
         request_iterator = AsyncIteratorMock([mock_peer_message])
 
         # Execute
-        with patch('src.grpc_server.logger') as mock_logger:
+        with patch('giggityflix_edge.grpc_server.logger') as mock_logger:
             response_generator = servicer.message(request_iterator, mock_grpc_context)
             responses = [r async for r in response_generator]
 
@@ -342,7 +342,7 @@ class TestGrpcServer:
         mock_message_handler.handle_peer_registration.return_value = mock_response
 
         # Execute
-        with patch('src.grpc_server.logger') as mock_logger:
+        with patch('giggityflix_edge.grpc_server.logger') as mock_logger:
             response_generator = servicer.message(request_iterator, mock_grpc_context)
             responses = [r async for r in response_generator]
 
@@ -366,10 +366,10 @@ class TestGrpcServer:
         server_mock = MagicMock()
         server_mock.start = AsyncMock()
 
-        with patch('src.grpc_server.grpc_aio_server', return_value=server_mock), \
-                patch('src.grpc_server.add_PeerEdgeServiceServicer_to_server') as mock_add_servicer, \
-                patch('src.grpc_server.config') as mock_config, \
-                patch('src.grpc_server.logger') as mock_logger:
+        with patch('giggityflix_edge.grpc_server.grpc_aio_server', return_value=server_mock), \
+                patch('giggityflix_edge.grpc_server.add_PeerEdgeServiceServicer_to_server') as mock_add_servicer, \
+                patch('giggityflix_edge.grpc_server.config') as mock_config, \
+                patch('giggityflix_edge.grpc_server.logger') as mock_logger:
             # Configure mock config
             mock_config.grpc.use_tls = False
             mock_config.grpc.server_address = "localhost:50051"
@@ -405,11 +405,11 @@ class TestGrpcServer:
         server_mock = MagicMock()
         server_mock.start = AsyncMock()
 
-        with patch('src.grpc_server.grpc_aio_server', return_value=server_mock), \
-                patch('src.grpc_server.add_PeerEdgeServiceServicer_to_server'), \
-                patch('src.grpc_server.config') as mock_config, \
-                patch('src.grpc_server.os.path.exists', return_value=False), \
-                patch('src.grpc_server.logger') as mock_logger:
+        with patch('giggityflix_edge.grpc_server.grpc_aio_server', return_value=server_mock), \
+                patch('giggityflix_edge.grpc_server.add_PeerEdgeServiceServicer_to_server'), \
+                patch('giggityflix_edge.grpc_server.config') as mock_config, \
+                patch('giggityflix_edge.grpc_server.os.path.exists', return_value=False), \
+                patch('giggityflix_edge.grpc_server.logger') as mock_logger:
             # Configure mock config
             mock_config.grpc.use_tls = True
             mock_config.grpc.server_address = "localhost:50051"
@@ -446,13 +446,13 @@ class TestGrpcServer:
 
         mock_credentials = "mock_credentials"
 
-        with patch('src.grpc_server.grpc_aio_server', return_value=server_mock), \
-                patch('src.grpc_server.add_PeerEdgeServiceServicer_to_server'), \
-                patch('src.grpc_server.config') as mock_config, \
-                patch('src.grpc_server.os.path.exists', return_value=True), \
+        with patch('giggityflix_edge.grpc_server.grpc_aio_server', return_value=server_mock), \
+                patch('giggityflix_edge.grpc_server.add_PeerEdgeServiceServicer_to_server'), \
+                patch('giggityflix_edge.grpc_server.config') as mock_config, \
+                patch('giggityflix_edge.grpc_server.os.path.exists', return_value=True), \
                 patch('builtins.open', mock_open(read_data=b"mock_file_content")), \
-                patch('src.grpc_server.grpc.ssl_server_credentials', return_value=mock_credentials), \
-                patch('src.grpc_server.logger') as mock_logger:
+                patch('giggityflix_edge.grpc_server.grpc.ssl_server_credentials', return_value=mock_credentials), \
+                patch('giggityflix_edge.grpc_server.logger') as mock_logger:
             # Configure mock config
             mock_config.grpc.use_tls = True
             mock_config.grpc.server_address = "localhost:50051"

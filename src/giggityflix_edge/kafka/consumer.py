@@ -5,7 +5,7 @@ import threading
 
 from confluent_kafka import Consumer, KafkaError, KafkaException
 
-from ..config import config
+from giggityflix_edge.config import config
 
 logger = logging.getLogger(__name__)
 

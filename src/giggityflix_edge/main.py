@@ -4,12 +4,12 @@ import signal
 import sys
 from typing import List
 
-from config import config
-from grpc_server import start_grpc_server
-from kafka.consumer import KafkaConsumer
-from kafka.producer import KafkaProducer
-from message_handler import MessageHandler
-from stream_manager import StreamManager
+from giggityflix_edge.config import config
+from giggityflix_edge.grpc_server import start_grpc_server
+from giggityflix_edge.kafka.consumer import KafkaConsumer
+from giggityflix_edge.kafka.producer import KafkaProducer
+from giggityflix_edge.message_handler import MessageHandler
+from giggityflix_edge.stream_manager import StreamManager
 
 logger = logging.getLogger(__name__)
 
