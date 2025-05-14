@@ -1,5 +1,4 @@
 import os
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -7,25 +6,26 @@ from pydantic import BaseModel, Field
 class KafkaConfig(BaseModel):
     bootstrap_servers: str = Field(default_factory=lambda: os.environ.get("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"))
     group_id: str = Field(default_factory=lambda: os.environ.get("KAFKA_GROUP_ID", "edge-service"))
-    
+
     # Consumed topics
     edge_commands_topic_pattern: str = Field(
         default_factory=lambda: os.environ.get("KAFKA_EDGE_COMMANDS_TOPIC_PATTERN", "edge-commands-{}"))
-    
+
     # Produced topics
     peer_lifecycle_events_topic: str = Field(
         default_factory=lambda: os.environ.get("KAFKA_PEER_LIFECYCLE_EVENTS_TOPIC", "peer-lifecycle-events"))
     peer_catalog_updates_topic: str = Field(
         default_factory=lambda: os.environ.get("KAFKA_PEER_CATALOG_UPDATES_TOPIC", "peer-catalog-updates"))
-    
+
     # Service-specific response topics
     file_delete_responses_topic: str = Field(
         default_factory=lambda: os.environ.get("KAFKA_FILE_DELETE_RESPONSES_TOPIC", "file-delete-responses"))
     file_hash_responses_topic: str = Field(
         default_factory=lambda: os.environ.get("KAFKA_FILE_HASH_RESPONSES_TOPIC", "file-hash-responses"))
     screenshot_capture_responses_topic: str = Field(
-        default_factory=lambda: os.environ.get("KAFKA_SCREENSHOT_CAPTURE_RESPONSES_TOPIC", "screenshot-capture-responses"))
-    
+        default_factory=lambda: os.environ.get("KAFKA_SCREENSHOT_CAPTURE_RESPONSES_TOPIC",
+                                               "screenshot-capture-responses"))
+
     # Dead letter queue
     deadletter_topic_pattern: str = Field(
         default_factory=lambda: os.environ.get("KAFKA_DEADLETTER_TOPIC_PATTERN", "edge-commands-{}.deadletter"))

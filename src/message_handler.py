@@ -2,7 +2,7 @@ import asyncio
 import logging
 import random
 import uuid
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List
 
 from src.config import config
 from src.grpc.generated import peer_edge_pb2 as pb2
@@ -14,6 +14,7 @@ class MessageHandler:
     """
     Handles message processing for all message types in the edge service.
     """
+
     def __init__(self, stream_manager, kafka_producer):
         self.stream_manager = stream_manager
         self.kafka_producer = kafka_producer
@@ -35,20 +36,20 @@ class MessageHandler:
             peer_id=peer_id,
             catalog_ids=catalog_uuids
         )
-        
+
         # Create registration response
         registration_response = pb2.PeerRegistrationResponse(
             peer_name=peer_id,
             edge_name=config.edge.edge_id,
             success=True
         )
-        
+
         # Create edge message
         edge_message = pb2.EdgeMessage(
             request_id=request_id,
             registration_response=registration_response
         )
-        
+
         logger.info(f"Registered peer {peer_id} with {len(catalog_uuids)} catalog IDs")
         return edge_message
 
@@ -67,7 +68,7 @@ class MessageHandler:
             success=file_delete_response.success,
             error_message=file_delete_response.error_message
         )
-        
+
         logger.info(
             f"File delete response from peer {peer_id} for catalog {file_delete_response.catalog_uuid}: "
             f"{'success' if file_delete_response.success else 'failure'}"
@@ -88,7 +89,7 @@ class MessageHandler:
             hashes=dict(file_hash_response.hashes),
             error_message=file_hash_response.error_message
         )
-        
+
         logger.info(
             f"File hash response from peer {peer_id} for catalog {file_hash_response.catalog_uuid} "
             f"with {len(file_hash_response.hashes)} hash types"
@@ -118,14 +119,14 @@ class MessageHandler:
                     catalog_uuid=catalog_uuid
                 )
             )
-        
+
         # Update peer's catalog
         assigned_catalog_ids = [result.catalog_uuid for result in file_offer_results]
         await self.kafka_producer.publish_peer_catalog_update(
             peer_id=peer_id,
             catalog_ids=assigned_catalog_ids
         )
-        
+
         logger.info(
             f"Batch file offer from peer {peer_id} with {len(batch_file_offer_request.files)} files "
             f"of type {batch_file_offer_request.category_type}"
@@ -142,7 +143,7 @@ class MessageHandler:
         """
         # In the updated flow, peers upload screenshots directly to the screenshot service
         # This handler is mainly for error reporting
-        
+
         if screenshot_capture_response.HasField('error_message'):
             logger.error(
                 f"Error capturing screenshot from peer {peer_id} for catalog "
@@ -166,7 +167,7 @@ class MessageHandler:
         command_type = command.get('command_type')
         command_data = command.get('command_data', {})
         request_id = command.get('request_id', str(uuid.uuid4()))
-        
+
         # Check if peer is connected
         if not self.stream_manager.is_peer_connected(peer_id):
             logger.warning(f"Peer {peer_id} not connected, cannot process {command_type} command")
@@ -176,7 +177,7 @@ class MessageHandler:
                 reason="Peer not connected"
             )
             return
-        
+
         # Handle command based on type
         try:
             if command_type == 'file_delete':
@@ -212,23 +213,23 @@ class MessageHandler:
             request_id: The request ID for correlation
         """
         catalog_uuids = command_data.get('catalog_uuids', [])
-        
+
         # Create file delete request
         file_delete_request = pb2.FileDeleteRequest(catalog_uuids=catalog_uuids)
-        
+
         # Create edge message
         edge_message = pb2.EdgeMessage(
             request_id=request_id,
             file_delete_request=file_delete_request
         )
-        
+
         # Send message to peer
         success = await self.stream_manager.send_message_to_peer(
             peer_id=peer_id,
             message=edge_message,
             retry_callback=self._create_retry_callback(max_retries=config.retry.max_retries)
         )
-        
+
         if success:
             logger.info(f"Sent file delete request to peer {peer_id} for {len(catalog_uuids)} catalog IDs")
         else:
@@ -250,26 +251,26 @@ class MessageHandler:
         """
         catalog_uuid = command_data.get('catalog_uuid', '')
         hash_types = command_data.get('hash_types', [])
-        
+
         # Create file hash request
         file_hash_request = pb2.FileHashRequest(
             catalog_uuid=catalog_uuid,
             hash_types=hash_types
         )
-        
+
         # Create edge message
         edge_message = pb2.EdgeMessage(
             request_id=request_id,
             file_hash_request=file_hash_request
         )
-        
+
         # Send message to peer
         success = await self.stream_manager.send_message_to_peer(
             peer_id=peer_id,
             message=edge_message,
             retry_callback=self._create_retry_callback(max_retries=config.retry.max_retries)
         )
-        
+
         if success:
             logger.info(f"Sent file hash request to peer {peer_id} for catalog {catalog_uuid}")
         else:
@@ -291,26 +292,26 @@ class MessageHandler:
         """
         old_catalog_uuid = command_data.get('old_catalog_uuid', '')
         new_catalog_uuid = command_data.get('new_catalog_uuid', '')
-        
+
         # Create file remap request
         file_remap_request = pb2.FileRemapRequest(
             old_catalog_uuid=old_catalog_uuid,
             new_catalog_uuid=new_catalog_uuid
         )
-        
+
         # Create edge message
         edge_message = pb2.EdgeMessage(
             request_id=request_id,
             file_remap_request=file_remap_request
         )
-        
+
         # Send message to peer
         success = await self.stream_manager.send_message_to_peer(
             peer_id=peer_id,
             message=edge_message,
             retry_callback=self._create_retry_callback(max_retries=config.retry.max_retries)
         )
-        
+
         if success:
             logger.info(f"Sent file remap request to peer {peer_id}: {old_catalog_uuid} -> {new_catalog_uuid}")
         else:
@@ -321,7 +322,8 @@ class MessageHandler:
                 reason="Failed to send message to peer"
             )
 
-    async def _handle_screenshot_capture_command(self, peer_id: str, command_data: Dict[str, Any], request_id: str) -> None:
+    async def _handle_screenshot_capture_command(self, peer_id: str, command_data: Dict[str, Any],
+                                                 request_id: str) -> None:
         """
         Handle a screenshot capture command.
         
@@ -334,7 +336,7 @@ class MessageHandler:
         quantity = command_data.get('quantity', 1)
         upload_token = command_data.get('upload_token', '')
         upload_endpoint = command_data.get('upload_endpoint', '')
-        
+
         # Create screenshot capture request with all fields from the updated proto
         screenshot_capture_request = pb2.ScreenshotCaptureRequest(
             catalog_uuid=catalog_uuid,
@@ -343,20 +345,20 @@ class MessageHandler:
             upload_endpoint=upload_endpoint,
             request_id=request_id  # Include the request_id as specified in the updated proto
         )
-        
+
         # Create edge message
         edge_message = pb2.EdgeMessage(
             request_id=request_id,
             screenshot_capture_request=screenshot_capture_request
         )
-        
+
         # Send message to peer
         success = await self.stream_manager.send_message_to_peer(
             peer_id=peer_id,
             message=edge_message,
             retry_callback=self._create_retry_callback(max_retries=config.retry.max_retries)
         )
-        
+
         if success:
             logger.info(f"Sent screenshot capture request to peer {peer_id} for catalog {catalog_uuid}")
         else:
@@ -377,7 +379,7 @@ class MessageHandler:
         Returns:
             Callable: The retry callback function
         """
-        
+
         async def retry_callback(peer_id: str, message) -> None:
             """
             Retry sending a message to a peer with exponential backoff.
@@ -394,15 +396,15 @@ class MessageHandler:
                 )
                 jitter_ms = base_delay_ms * config.retry.jitter_factor * random.random()
                 delay_ms = base_delay_ms + jitter_ms
-                
+
                 # Wait before retrying
                 await asyncio.sleep(delay_ms / 1000)
-                
+
                 # Check if peer is still connected
                 if not self.stream_manager.is_peer_connected(peer_id):
                     logger.warning(f"Peer {peer_id} not connected, abandoning retry")
                     return
-                
+
                 # Try to send message again
                 try:
                     success = await self.stream_manager.send_message_to_peer(
@@ -410,17 +412,17 @@ class MessageHandler:
                         message=message,
                         retry_callback=None  # No more retries to avoid infinite recursion
                     )
-                    
+
                     if success:
                         logger.info(f"Successfully sent message to peer {peer_id} on retry {retry + 1}")
                         return
-                    
+
                 except Exception as e:
                     logger.error(f"Error retrying send to peer {peer_id}: {e}")
-            
+
             # If we get here, all retries failed
             logger.error(f"Failed to send message to peer {peer_id} after {max_retries} retries")
             # Note: We can't access command_data here to publish to deadletter queue,
             # but the message will have been sent to the deadletter queue on the first failure
-        
+
         return retry_callback

@@ -1,6 +1,7 @@
 # Giggityflix Edge Service
 
-The Edge Service is a key component of the Giggityflix media streaming platform, responsible for managing peer connections and routing requests between peers and backend services.
+The Edge Service is a key component of the Giggityflix media streaming platform, responsible for managing peer
+connections and routing requests between peers and backend services.
 
 ## Overview
 
@@ -69,7 +70,8 @@ The Edge Service can be configured using environment variables:
 - `KAFKA_PEER_CATALOG_UPDATES_TOPIC`: Topic for peer catalog updates (default: peer-catalog-updates)
 - `KAFKA_FILE_DELETE_RESPONSES_TOPIC`: Topic for file delete responses (default: file-delete-responses)
 - `KAFKA_FILE_HASH_RESPONSES_TOPIC`: Topic for file hash responses (default: file-hash-responses)
-- `KAFKA_SCREENSHOT_CAPTURE_RESPONSES_TOPIC`: Topic for screenshot capture responses (default: screenshot-capture-responses)
+- `KAFKA_SCREENSHOT_CAPTURE_RESPONSES_TOPIC`: Topic for screenshot capture responses (default:
+  screenshot-capture-responses)
 - `KAFKA_DEADLETTER_TOPIC_PATTERN`: Pattern for deadletter queue topic (default: edge-commands-{}.deadletter)
 
 ### Retry Configuration
@@ -89,19 +91,19 @@ poetry run python -m src.main
 ## Message Flow
 
 1. **Peer Registration**:
-   - Peer sends a PeerRegistrationRequest to the Edge Service
-   - Edge Service registers the peer and publishes a peer-connected event
-   - Edge Service responds with a PeerRegistrationResponse
+    - Peer sends a PeerRegistrationRequest to the Edge Service
+    - Edge Service registers the peer and publishes a peer-connected event
+    - Edge Service responds with a PeerRegistrationResponse
 
 2. **Command Routing**:
-   - Backend services publish commands to the edge-commands-{edge_id} topic
-   - Edge Service consumes commands and routes them to the appropriate peer
-   - Peer responds to the command
-   - Edge Service publishes the response to the appropriate topic
+    - Backend services publish commands to the edge-commands-{edge_id} topic
+    - Edge Service consumes commands and routes them to the appropriate peer
+    - Peer responds to the command
+    - Edge Service publishes the response to the appropriate topic
 
 3. **Peer Disconnection**:
-   - Edge Service detects peer disconnection (gRPC stream closure)
-   - Edge Service publishes a peer-disconnected event
+    - Edge Service detects peer disconnection (gRPC stream closure)
+    - Edge Service publishes a peer-disconnected event
 
 ## Development
 
