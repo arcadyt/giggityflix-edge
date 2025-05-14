@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+service PeerEdgeService { 
+  rpc message(stream PeerMessage) returns (stream EdgeMessage); 
+}
+
+message EdgeMessage { 
+  string request_id = 1; 
+  oneof message { 
+    PeerRegistrationResponse registration_response = 2; 
+    FileDeleteRequest file_delete_request = 3; 
+    FileHashRequest file_hash_request = 4; 
+    BatchFileOfferResponse batch_file_offer_response = 5; 
+    FileRemapRequest file_remap_request = 6; 
+    ScreenshotCaptureRequest screenshot_capture_request = 7; 
+  } 
+}
+
+message PeerMessage { 
+  string request_id = 1; 
+  oneof message { 
+    PeerRegistrationRequest registration_request = 2; 
+    FileDeleteResponse file_delete_response = 3; 
+    FileHashResponse file_hash_response = 4; 
+    BatchFileOfferRequest batch_file_offer_request = 5;
+    ScreenshotCaptureResponse screenshot_capture_response = 6;
+  } 
+}
+
+message ScreenshotCaptureRequest { 
+  string catalog_uuid = 1; 
+  int32 quantity = 2; 
+  string upload_token = 3; 
+  string upload_endpoint = 4; 
+  string request_id = 5; 
+}
+
+// Remaining messages as defined
+message PeerRegistrationRequest { 
+  string peer_name = 1; 
+  repeated string catalog_uuids = 2; 
+}
+
+message PeerRegistrationResponse { 
+  string peer_name = 1; 
+  string edge_name = 2; 
+  bool success = 3; 
+}
+
+message FileDeleteRequest { 
+  repeated string catalog_uuids = 1; 
+}
+
+message FileDeleteResponse { 
+  string catalog_uuid = 1; 
+  bool success = 2; 
+  string error_message = 3; 
+}
+
+message FileHashRequest { 
+  string catalog_uuid = 1; 
+  repeated string hash_types = 2; 
+}
+
+message FileHashResponse { 
+  string catalog_uuid = 1; 
+  map<string, string> hashes = 2; 
+  string error_message = 3; 
+}
+
+message BatchFileOfferRequest { 
+  repeated FileOfferItem files = 1; 
+  string category_type = 2; 
+}
+
+message FileOfferItem { 
+  string peer_luid = 1; 
+  string relative_path = 2; 
+  int64 size_bytes = 3; 
+}
+
+message BatchFileOfferResponse { 
+  repeated FileOfferResult files = 1; 
+}
+
+message FileOfferResult { 
+  string peer_luid = 1; 
+  string catalog_uuid = 2; 
+}
+
+message FileRemapRequest { 
+  string old_catalog_uuid = 1; 
+  string new_catalog_uuid = 2; 
+}
+
+message FileRemapResponse { 
+  string new_catalog_uuid = 1; 
+  bool success = 2; 
+  string error_message = 3; 
+}
+
+message ScreenshotCaptureResponse { 
+  string catalog_uuid = 1; 
+  oneof result { 
+    ScreenshotData screenshot = 2; 
+    string error_message = 3; 
+  } 
+}
+
+message ScreenshotData { 
+  int32 frame_number_in_video = 1; 
+  bytes screenshot = 2; 
+}
