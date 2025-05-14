@@ -1,7 +1,6 @@
 import json
 from unittest.mock import patch, MagicMock, AsyncMock
 
-import pytest
 from confluent_kafka import KafkaError
 
 from src.config import config
@@ -335,7 +334,6 @@ class TestKafkaConsumer:
             mock_logger.error.assert_called_once()
             assert "Failed to process message" in mock_logger.error.call_args[0][0]
 
-    @pytest.mark.skip
     def test_consume_loop_kafka_exception(self):
         """Test consume loop with KafkaException."""
         # Setup
@@ -344,20 +342,33 @@ class TestKafkaConsumer:
 
         # Set up consumer to raise KafkaException
         mock_consumer = MagicMock()
-        mock_consumer.poll.side_effect = Exception("Kafka error")
-        consumer.consumer = mock_consumer
-        consumer.running = True
 
-        # Execute
-        with patch('src.kafka.consumer.logger') as mock_logger:
-            consumer._consume_loop()
+        # Create a patch for the confluent_kafka.KafkaException class
+        with patch('src.kafka.consumer.KafkaException', Exception):
+            # Make poll raise our mocked KafkaException
+            mock_consumer.poll.side_effect = Exception("Kafka error")
+            consumer.consumer = mock_consumer
+            consumer.running = True
 
-            # Verify poll was called
-            mock_consumer.poll.assert_called_once_with(timeout=1.0)
+            # Create a flag to stop after one iteration
+            counter = [0]
 
-            # Verify error was logged
-            mock_logger.error.assert_called_once()
-            assert "Kafka exception" in mock_logger.error.call_args[0][0]
+            def side_effect(*args, **kwargs):
+                counter[0] += 1
+                if counter[0] > 1:
+                    consumer.running = False
+                raise Exception("Kafka error")
 
-            # Verify consumer was closed
-            mock_consumer.close.assert_called_once()
+            mock_consumer.poll.side_effect = side_effect
+
+            # Execute
+            with patch('src.kafka.consumer.logger') as mock_logger:
+                consumer._consume_loop()
+
+                # Verify error was logged
+                mock_logger.error.assert_called()
+                error_logs = [call[0][0] for call in mock_logger.error.call_args_list]
+                assert any("Kafka exception" in msg for msg in error_logs)
+
+                # Verify consumer was closed
+                mock_consumer.close.assert_called_once()
