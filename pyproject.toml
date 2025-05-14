@@ -1,20 +1,31 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
-name = "edge-service"
+name = "giggityflix-edge"
 version = "0.1.0"
 description = "Edge service for the Giggityflix media streaming platform"
 readme = "README.md"
-packages = [{ include = "src" }]
+packages = [
+    { include = "src" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.7.1"
 confluent-kafka = "^2.3.0"
-grpcio = "^1.59.0"
-grpcio-tools = "^1.59.0"
-protobuf = "^4.24.3"
+grpcio = "^1.71.0"
+protobuf = "^6.31.0"
 prometheus-client = "^0.17.1"
 pybreaker = "^1.0.2"
 asyncio = "^3.4.3"
+giggityflix-grpc-peer = { path = "../giggityflix-grpc-peer", develop = true }
+aiohttp = "^3.9.1"
+aiortc = "^1.5.0"
+watchdog = "^3.0.0"
+colorlog = "^6.7.0"
+typer = { extras = ["all"], version = "^0.9.0" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
@@ -28,10 +39,6 @@ isort = "^5.13.2"
 pre-commit = "^3.6.0"
 freezegun = "^1.4.0"
 grpcio-testing = "^1.59.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 88
@@ -53,19 +60,19 @@ warn_redundant_casts = true
 warn_return_any = true
 warn_unused_ignores = true
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-asyncio_mode = "auto"
-python_files = "test_*.py"
-python_classes = "Test*"
-python_functions = "test_*"
-markers = [
-    "unit: marks unit tests",
-    "integration: marks integration tests",
-    "functional: marks functional tests",
-    "slow: marks tests as slow",
-]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-]
+#[tool.pytest.ini_options]
+#testpaths = ["tests"]
+#asyncio_mode = "auto"
+#python_files = "test_*.py"
+#python_classes = "Test*"
+#python_functions = "test_*"
+#markers = [
+#    "unit: marks unit tests",
+#    "integration: marks integration tests",
+#    "functional: marks functional tests",
+#    "slow: marks tests as slow",
+#]
+#filterwarnings = [
+#    "ignore::DeprecationWarning",
+#]
 #addopts = "--cov=src --cov-report=term-missing:skip-covered --cov-report=xml --cov-branch"

@@ -5,7 +5,7 @@ from typing import Dict, Any, List, Optional
 
 from confluent_kafka import Producer
 
-from src.config import config
+from ..config import config
 
 logger = logging.getLogger(__name__)
 

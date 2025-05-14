@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from src.message_handler import MessageHandler
+from giggityflix_edge.message_handler import MessageHandler
 
 
 @pytest.mark.asyncio

@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, AsyncMock
 
 import pytest
 
-from src.utils.error_handler import exponential_backoff, safe_execute, log_exceptions
+from giggityflix_edge.utils.error_handler import exponential_backoff, safe_execute, log_exceptions
 
 
 @pytest.mark.asyncio

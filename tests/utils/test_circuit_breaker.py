@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, PropertyMock
 import pybreaker
 import pytest
 
-from src.utils.circuit_breaker import (
+from giggityflix_edge.utils.circuit_breaker import (
     get_circuit_breaker, circuit_protected, with_circuit_breaker, CircuitState
 )
 

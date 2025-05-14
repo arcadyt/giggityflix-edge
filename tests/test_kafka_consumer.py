@@ -3,8 +3,8 @@ from unittest.mock import patch, MagicMock, AsyncMock
 
 from confluent_kafka import KafkaError
 
-from src.config import config
-from src.kafka.consumer import KafkaConsumer
+from giggityflix_edge.config import config
+from giggityflix_edge.kafka.consumer import KafkaConsumer
 
 
 class TestKafkaConsumer:

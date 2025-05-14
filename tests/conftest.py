@@ -10,10 +10,10 @@ sys.modules['giggityflix_protos'] = MagicMock()
 sys.modules['giggityflix_protos.peer_edge_pb2'] = MagicMock()
 sys.modules['giggityflix_protos.peer_edge_pb2_grpc'] = MagicMock()
 
-from src.stream_manager import StreamManager
-from src.message_handler import MessageHandler
-from src.kafka.producer import KafkaProducer
-from src.kafka.consumer import KafkaConsumer
+from giggityflix_edge.stream_manager import StreamManager
+from giggityflix_edge.message_handler import MessageHandler
+from giggityflix_edge.kafka.producer import KafkaProducer
+from giggityflix_edge.kafka.consumer import KafkaConsumer
 
 
 # ====== Test Data Fixtures ======

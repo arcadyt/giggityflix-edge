@@ -1,8 +1,8 @@
 import logging
 from typing import Dict
 
-from src.grpc.edge_client import EdgeClient
-from src.models import ScreenshotTokenInfo
+from giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2_grpc import PeerEdgeServiceServicer, PeerEdgeService, PeerEdgeServiceStub
+from models import ScreenshotTokenInfo
 
 logger = logging.getLogger(__name__)
 

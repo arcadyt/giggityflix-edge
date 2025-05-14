@@ -1,7 +1,7 @@
 import time
 from unittest.mock import patch, MagicMock
 
-from src.utils.metrics import (
+from giggityflix_edge.utils.metrics import (
     track_peer_connection, track_peer_disconnection, track_message,
     track_kafka_message, track_error, time_function, time_kafka_publish
 )

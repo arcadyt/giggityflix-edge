@@ -5,11 +5,10 @@ import os
 import grpc
 from grpc.aio import server as grpc_aio_server
 
-from src.config import config
-# Import generated proto code
-from src.grpc.generated.peer_edge_pb2_grpc import PeerEdgeServiceServicer, add_PeerEdgeServiceServicer_to_server
-from src.message_handler import MessageHandler
-from src.stream_manager import StreamManager
+from config import config
+from giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2_grpc import PeerEdgeServiceServicer, add_PeerEdgeServiceServicer_to_server
+from message_handler import MessageHandler
+from stream_manager import StreamManager
 
 logger = logging.getLogger(__name__)
 

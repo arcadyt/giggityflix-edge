@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, AsyncMock
 
 import pytest
 
-from src.stream_manager import StreamManager
+from giggityflix_edge.stream_manager import StreamManager
 
 
 @pytest.mark.asyncio

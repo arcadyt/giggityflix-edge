@@ -4,12 +4,12 @@ import signal
 import sys
 from typing import List
 
-from src.config import config
-from src.grpc_server import start_grpc_server
-from src.kafka.consumer import KafkaConsumer
-from src.kafka.producer import KafkaProducer
-from src.message_handler import MessageHandler
-from src.stream_manager import StreamManager
+from config import config
+from grpc_server import start_grpc_server
+from kafka.consumer import KafkaConsumer
+from kafka.producer import KafkaProducer
+from message_handler import MessageHandler
+from stream_manager import StreamManager
 
 logger = logging.getLogger(__name__)
 

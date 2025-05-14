@@ -3,8 +3,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from src.config import config
-from src.kafka.producer import KafkaProducer
+from giggityflix_edge.config import config
+from giggityflix_edge.kafka.producer import KafkaProducer
 
 
 @pytest.mark.asyncio

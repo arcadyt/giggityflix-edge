@@ -4,8 +4,8 @@ import random
 import uuid
 from typing import Dict, Any, List
 
-from src.config import config
-from src.grpc.generated import peer_edge_pb2 as pb2
+from giggityflix_edge.config import config
+import giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2 as pb2
 
 logger = logging.getLogger(__name__)
 

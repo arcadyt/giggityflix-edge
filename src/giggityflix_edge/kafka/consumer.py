@@ -5,7 +5,7 @@ import threading
 
 from confluent_kafka import Consumer, KafkaError, KafkaException
 
-from src.config import config
+from ..config import config
 
 logger = logging.getLogger(__name__)
 

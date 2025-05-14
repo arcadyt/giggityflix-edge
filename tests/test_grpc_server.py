@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock, AsyncMock, mock_open
 import grpc
 import pytest
 
-from src.grpc_server import PeerEdgeServicer, start_grpc_server
+from giggityflix_edge.grpc_server import PeerEdgeServicer, start_grpc_server
 
 
 @pytest.mark.asyncio
