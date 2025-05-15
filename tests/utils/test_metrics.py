@@ -11,7 +11,7 @@ class TestMetrics:
 
     def test_track_peer_connection(self):
         """Test tracking a new peer connection."""
-        with patch('src.utils.metrics.PEER_CONNECTIONS') as mock_gauge:
+        with patch('giggityflix_edge.utils.metrics.PEER_CONNECTIONS') as mock_gauge:
             # Setup mock gauge
             mock_labels = MagicMock()
             mock_gauge.labels.return_value = mock_labels
@@ -25,8 +25,8 @@ class TestMetrics:
 
     def test_track_peer_disconnection(self):
         """Test tracking a peer disconnection."""
-        with patch('src.utils.metrics.PEER_CONNECTIONS') as mock_connections_gauge, \
-                patch('src.utils.metrics.PEER_CONNECTION_DURATION') as mock_duration_hist:
+        with patch('giggityflix_edge.utils.metrics.PEER_CONNECTIONS') as mock_connections_gauge, \
+                patch('giggityflix_edge.utils.metrics.PEER_CONNECTION_DURATION') as mock_duration_hist:
             # Setup mock gauges
             mock_connections_labels = MagicMock()
             mock_connections_gauge.labels.return_value = mock_connections_labels
@@ -46,8 +46,8 @@ class TestMetrics:
 
     def test_track_message(self):
         """Test tracking a message."""
-        with patch('src.utils.metrics.MESSAGE_COUNTER') as mock_counter, \
-                patch('src.utils.metrics.MESSAGE_SIZE') as mock_hist:
+        with patch('giggityflix_edge.utils.metrics.MESSAGE_COUNTER') as mock_counter, \
+                patch('giggityflix_edge.utils.metrics.MESSAGE_SIZE') as mock_hist:
             # Setup mocks
             mock_counter_labels = MagicMock()
             mock_counter.labels.return_value = mock_counter_labels
@@ -71,7 +71,7 @@ class TestMetrics:
 
     def test_track_kafka_message(self):
         """Test tracking a Kafka message."""
-        with patch('src.utils.metrics.KAFKA_MESSAGE_COUNTER') as mock_counter:
+        with patch('giggityflix_edge.utils.metrics.KAFKA_MESSAGE_COUNTER') as mock_counter:
             # Setup mock
             mock_counter_labels = MagicMock()
             mock_counter.labels.return_value = mock_counter_labels
@@ -87,7 +87,7 @@ class TestMetrics:
 
     def test_track_error(self):
         """Test tracking an error."""
-        with patch('src.utils.metrics.ERROR_COUNTER') as mock_counter:
+        with patch('giggityflix_edge.utils.metrics.ERROR_COUNTER') as mock_counter:
             # Setup mock
             mock_counter_labels = MagicMock()
             mock_counter.labels.return_value = mock_counter_labels
@@ -103,7 +103,7 @@ class TestMetrics:
 
     def test_time_function_decorator(self):
         """Test time_function decorator."""
-        with patch('src.utils.metrics.MESSAGE_PROCESSING_TIME') as mock_hist:
+        with patch('giggityflix_edge.utils.metrics.MESSAGE_PROCESSING_TIME') as mock_hist:
             # Setup mock
             mock_hist_labels = MagicMock()
             mock_hist.labels.return_value = mock_hist_labels
@@ -129,7 +129,7 @@ class TestMetrics:
 
     def test_time_function_actual_timing(self):
         """Test time_function decorator actually measures time."""
-        with patch('src.utils.metrics.MESSAGE_PROCESSING_TIME') as mock_hist:
+        with patch('giggityflix_edge.utils.metrics.MESSAGE_PROCESSING_TIME') as mock_hist:
             # Setup mock
             mock_hist_labels = MagicMock()
             mock_hist.labels.return_value = mock_hist_labels
@@ -152,7 +152,7 @@ class TestMetrics:
 
     def test_time_kafka_publish_decorator(self):
         """Test time_kafka_publish decorator."""
-        with patch('src.utils.metrics.KAFKA_PUBLISH_TIME') as mock_hist:
+        with patch('giggityflix_edge.utils.metrics.KAFKA_PUBLISH_TIME') as mock_hist:
             # Setup mock
             mock_hist_labels = MagicMock()
             mock_hist.labels.return_value = mock_hist_labels
@@ -178,7 +178,7 @@ class TestMetrics:
 
     def test_time_kafka_publish_actual_timing(self):
         """Test time_kafka_publish decorator actually measures time."""
-        with patch('src.utils.metrics.KAFKA_PUBLISH_TIME') as mock_hist:
+        with patch('giggityflix_edge.utils.metrics.KAFKA_PUBLISH_TIME') as mock_hist:
             # Setup mock
             mock_hist_labels = MagicMock()
             mock_hist.labels.return_value = mock_hist_labels

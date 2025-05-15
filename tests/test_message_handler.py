@@ -117,7 +117,7 @@ class TestMessageHandler:
         screenshot_response.HasField = MagicMock(return_value=False)  # No error message
 
         # Execute
-        with patch('src.message_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.message_handler.logger') as mock_logger:
             await handler.handle_screenshot_capture_response(test_data["peer_id"], screenshot_response)
 
             # Verify
@@ -136,7 +136,7 @@ class TestMessageHandler:
         screenshot_response.error_message = "Failed to capture screenshot"
 
         # Execute
-        with patch('src.message_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.message_handler.logger') as mock_logger:
             await handler.handle_screenshot_capture_response(test_data["peer_id"], screenshot_response)
 
             # Verify

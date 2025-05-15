@@ -13,7 +13,7 @@ class TestKafkaProducer:
     async def test_publish_peer_lifecycle_event(self, test_data):
         """Test publishing a peer lifecycle event."""
         # Setup
-        with patch('src.kafka.producer.Producer') as mock_producer_class:
+        with patch('giggityflix_edge.kafka.producer.Producer') as mock_producer_class:
             mock_producer = MagicMock()
             mock_producer_class.return_value = mock_producer
 
@@ -49,7 +49,7 @@ class TestKafkaProducer:
     async def test_publish_peer_catalog_update(self, test_data):
         """Test publishing a peer catalog update."""
         # Setup
-        with patch('src.kafka.producer.Producer') as mock_producer_class:
+        with patch('giggityflix_edge.kafka.producer.Producer') as mock_producer_class:
             mock_producer = MagicMock()
             mock_producer_class.return_value = mock_producer
 
@@ -82,7 +82,7 @@ class TestKafkaProducer:
     async def test_publish_file_delete_response(self, test_data):
         """Test publishing a file delete response."""
         # Setup
-        with patch('src.kafka.producer.Producer') as mock_producer_class:
+        with patch('giggityflix_edge.kafka.producer.Producer') as mock_producer_class:
             mock_producer = MagicMock()
             mock_producer_class.return_value = mock_producer
 
@@ -116,7 +116,7 @@ class TestKafkaProducer:
     async def test_publish_file_hash_response(self, test_data):
         """Test publishing a file hash response."""
         # Setup
-        with patch('src.kafka.producer.Producer') as mock_producer_class:
+        with patch('giggityflix_edge.kafka.producer.Producer') as mock_producer_class:
             mock_producer = MagicMock()
             mock_producer_class.return_value = mock_producer
 
@@ -152,7 +152,7 @@ class TestKafkaProducer:
     async def test_publish_deadletter(self, test_data):
         """Test publishing a message to the deadletter queue."""
         # Setup
-        with patch('src.kafka.producer.Producer') as mock_producer_class:
+        with patch('giggityflix_edge.kafka.producer.Producer') as mock_producer_class:
             mock_producer = MagicMock()
             mock_producer_class.return_value = mock_producer
 
@@ -195,7 +195,7 @@ class TestKafkaProducer:
         msg.partition.return_value = 0
 
         # Execute
-        with patch('src.kafka.producer.logger') as mock_logger:
+        with patch('giggityflix_edge.kafka.producer.logger') as mock_logger:
             producer._delivery_report(None, msg)
 
             # Verify
@@ -210,7 +210,7 @@ class TestKafkaProducer:
         error = "Test error"
 
         # Execute
-        with patch('src.kafka.producer.logger') as mock_logger:
+        with patch('giggityflix_edge.kafka.producer.logger') as mock_logger:
             producer._delivery_report(error, None)
 
             # Verify
@@ -221,7 +221,7 @@ class TestKafkaProducer:
     async def test_publish_message_exception(self, test_data):
         """Test error handling in _publish_message."""
         # Setup
-        with patch('src.kafka.producer.Producer') as mock_producer_class:
+        with patch('giggityflix_edge.kafka.producer.Producer') as mock_producer_class:
             mock_producer = MagicMock()
             mock_producer.produce.side_effect = Exception("Test exception")
             mock_producer_class.return_value = mock_producer
@@ -229,7 +229,7 @@ class TestKafkaProducer:
             producer = KafkaProducer()
 
             # Execute
-            with patch('src.kafka.producer.logger') as mock_logger:
+            with patch('giggityflix_edge.kafka.producer.logger') as mock_logger:
                 producer._publish_message("test-topic", {"key": "value"})
 
                 # Verify

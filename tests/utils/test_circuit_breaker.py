@@ -30,7 +30,7 @@ class TestCircuitBreaker:
             assert circuit.reset_timeout == 30  # Default value
 
             # Verify it was added to the registry
-            with patch('src.utils.circuit_breaker.CIRCUIT_BREAKERS') as mock_registry:
+            with patch('giggityflix_edge.utils.circuit_breaker.CIRCUIT_BREAKERS') as mock_registry:
                 mock_registry.__getitem__.return_value = circuit
                 assert get_circuit_breaker("test_circuit") == circuit
 

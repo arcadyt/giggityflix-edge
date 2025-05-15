@@ -2,7 +2,7 @@ import logging
 from typing import Dict
 
 from giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2_grpc import PeerEdgeServiceServicer, PeerEdgeService, PeerEdgeServiceStub
-from models import ScreenshotTokenInfo
+# from models import ScreenshotTokenInfo
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ class EdgeServiceClient:
     """Client for interacting with the Edge Service via gRPC."""
 
     def __init__(self):
-        self.edge_clients: Dict[str, EdgeClient] = {}
+        self.edge_clients: Dict[str, any] = {}
 
     async def connect_to_edge(self, edge_id: str, edge_address: str) -> None:
         """
@@ -34,7 +34,9 @@ class EdgeServiceClient:
             logger.info(f"Closed connection to edge {edge_id}")
         self.edge_clients.clear()
 
-    async def send_screenshot_request(self, edge_id: str, peer_id: str, token_info: ScreenshotTokenInfo) -> bool:
+    async def send_screenshot_request(self, edge_id: str, peer_id: str,
+                                      token_info#: ScreenshotTokenInfo
+                                      ) -> bool:
         """
         Send a screenshot request to a peer via its Edge Service.
         

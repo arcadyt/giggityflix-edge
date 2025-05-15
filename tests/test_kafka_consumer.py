@@ -32,7 +32,7 @@ class TestKafkaConsumer:
         consumer.running = True  # Already running
 
         # Execute
-        with patch('src.kafka.consumer.logger') as mock_logger:
+        with patch('giggityflix_edge.kafka.consumer.logger') as mock_logger:
             consumer.start_consuming()
 
             # Verify
@@ -45,8 +45,8 @@ class TestKafkaConsumer:
         message_handler = MagicMock()
         consumer = KafkaConsumer(message_handler)
 
-        with patch('src.kafka.consumer.Consumer') as mock_consumer_class, \
-                patch('src.kafka.consumer.threading.Thread') as mock_thread_class, \
+        with patch('giggityflix_edge.kafka.consumer.Consumer') as mock_consumer_class, \
+                patch('giggityflix_edge.kafka.consumer.threading.Thread') as mock_thread_class, \
                 patch('asyncio.get_event_loop') as mock_get_loop:
             mock_consumer = MagicMock()
             mock_consumer_class.return_value = mock_consumer
@@ -98,7 +98,7 @@ class TestKafkaConsumer:
         consumer.consumer_thread = MagicMock()
 
         # Execute
-        with patch('src.kafka.consumer.logger') as mock_logger:
+        with patch('giggityflix_edge.kafka.consumer.logger') as mock_logger:
             consumer.stop_consuming()
 
             # Verify
@@ -120,7 +120,7 @@ class TestKafkaConsumer:
         consumer.consumer_thread = mock_thread
 
         # Execute
-        with patch('src.kafka.consumer.logger') as mock_logger:
+        with patch('giggityflix_edge.kafka.consumer.logger') as mock_logger:
             consumer.stop_consuming()
 
             # Verify
@@ -220,7 +220,7 @@ class TestKafkaConsumer:
         mock_consumer.poll.side_effect = stop_after_poll
 
         # Execute
-        with patch('src.kafka.consumer.logger') as mock_logger:
+        with patch('giggityflix_edge.kafka.consumer.logger') as mock_logger:
             consumer._consume_loop()
 
             # Verify poll was called
@@ -324,7 +324,7 @@ class TestKafkaConsumer:
 
         # Execute
         with patch('asyncio.run_coroutine_threadsafe', return_value=mock_future) as mock_run_threadsafe, \
-                patch('src.kafka.consumer.logger') as mock_logger:
+                patch('giggityflix_edge.kafka.consumer.logger') as mock_logger:
             consumer._consume_loop()
 
             # Verify poll was called
@@ -344,7 +344,7 @@ class TestKafkaConsumer:
         mock_consumer = MagicMock()
 
         # Create a patch for the confluent_kafka.KafkaException class
-        with patch('src.kafka.consumer.KafkaException', Exception):
+        with patch('giggityflix_edge.kafka.consumer.KafkaException', Exception):
             # Make poll raise our mocked KafkaException
             mock_consumer.poll.side_effect = Exception("Kafka error")
             consumer.consumer = mock_consumer
@@ -362,7 +362,7 @@ class TestKafkaConsumer:
             mock_consumer.poll.side_effect = side_effect
 
             # Execute
-            with patch('src.kafka.consumer.logger') as mock_logger:
+            with patch('giggityflix_edge.kafka.consumer.logger') as mock_logger:
                 consumer._consume_loop()
 
                 # Verify error was logged

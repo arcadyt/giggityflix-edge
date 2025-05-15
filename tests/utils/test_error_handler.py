@@ -39,7 +39,7 @@ class TestErrorHandler:
         )(mock_func)
 
         # Execute
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             result = await decorated_func()
 
             # Verify logger was called for each retry
@@ -65,7 +65,7 @@ class TestErrorHandler:
         )(mock_func)
 
         # Execute and verify exception is raised
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             with pytest.raises(Exception, match="Always fails"):
                 await decorated_func()
 
@@ -109,8 +109,8 @@ class TestErrorHandler:
         )(mock_func)
 
         # Execute with time.sleep patched to avoid actual delays
-        with patch('src.utils.error_handler.logger') as mock_logger, \
-                patch('src.utils.error_handler.time.sleep') as mock_sleep:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger, \
+                patch('giggityflix_edge.utils.error_handler.time.sleep') as mock_sleep:
             result = decorated_func()
 
             # Verify logger was called for each retry
@@ -143,8 +143,8 @@ class TestErrorHandler:
         )(mock_func)
 
         # Execute and verify exception is raised
-        with patch('src.utils.error_handler.logger') as mock_logger, \
-                patch('src.utils.error_handler.time.sleep') as mock_sleep:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger, \
+                patch('giggityflix_edge.utils.error_handler.time.sleep') as mock_sleep:
             with pytest.raises(Exception, match="Always fails"):
                 decorated_func()
 
@@ -177,7 +177,7 @@ class TestErrorHandler:
         )(mock_func)
 
         # Execute with time.sleep patched
-        with patch('src.utils.error_handler.time.sleep'):
+        with patch('giggityflix_edge.utils.error_handler.time.sleep'):
             result = decorated_func()
 
         # Verify
@@ -225,7 +225,7 @@ class TestErrorHandler:
             raise ValueError("Test error")
 
         # Execute with logger mocked
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             result = await safe_execute(test_func)
 
         # Verify
@@ -255,7 +255,7 @@ class TestErrorHandler:
             raise ValueError("Test error")
 
         # Execute with logger mocked
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             result = asyncio.run(safe_execute(test_func))
 
         # Verify
@@ -274,7 +274,7 @@ class TestErrorHandler:
         decorated_func = log_exceptions(test_func)
 
         # Execute with logger mocked
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             with pytest.raises(ValueError, match="Test exception"):
                 await decorated_func()
 
@@ -293,7 +293,7 @@ class TestErrorHandler:
         decorated_func = log_exceptions(test_func)
 
         # Execute with logger mocked
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             with pytest.raises(ValueError, match="Test exception"):
                 decorated_func()
 
@@ -312,7 +312,7 @@ class TestErrorHandler:
         decorated_func = log_exceptions(test_func)
 
         # Execute with logger mocked
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             result = await decorated_func()
 
         # Verify
@@ -329,7 +329,7 @@ class TestErrorHandler:
         decorated_func = log_exceptions(test_func)
 
         # Execute with logger mocked
-        with patch('src.utils.error_handler.logger') as mock_logger:
+        with patch('giggityflix_edge.utils.error_handler.logger') as mock_logger:
             result = decorated_func()
 
         # Verify
