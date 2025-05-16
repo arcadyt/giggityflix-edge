@@ -5,39 +5,6 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-# Create mock pb2 module with message classes
-mock_pb2 = MagicMock()
-mock_pb2.EdgeMessage = MagicMock
-mock_pb2.PeerMessage = MagicMock
-mock_pb2.PeerRegistrationRequest = MagicMock
-mock_pb2.PeerRegistrationResponse = MagicMock
-mock_pb2.FileDeleteRequest = MagicMock
-mock_pb2.FileDeleteResponse = MagicMock
-mock_pb2.FileHashRequest = MagicMock
-mock_pb2.FileHashResponse = MagicMock
-mock_pb2.BatchFileOfferRequest = MagicMock
-mock_pb2.BatchFileOfferResponse = MagicMock
-mock_pb2.FileRemapRequest = MagicMock
-mock_pb2.ScreenshotCaptureRequest = MagicMock
-mock_pb2.ScreenshotCaptureResponse = MagicMock
-mock_pb2.ScreenshotData = MagicMock
-mock_pb2.FileOfferItem = MagicMock
-mock_pb2.FileOfferResult = MagicMock
-
-# Create mock pb2_grpc module with service classes
-mock_pb2_grpc = MagicMock()
-mock_pb2_grpc.PeerEdgeServiceServicer = MagicMock
-mock_pb2_grpc.add_PeerEdgeServiceServicer_to_server = MagicMock()
-
-# Register mocks in sys.modules
-sys.modules['giggityflix_grpc_peer'] = MagicMock()
-sys.modules['giggityflix_grpc_peer.generated'] = MagicMock()
-sys.modules['giggityflix_grpc_peer.generated.peer_edge'] = MagicMock()
-sys.modules['giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2'] = mock_pb2
-sys.modules['giggityflix_grpc_peer.generated.peer_edge.peer_edge_pb2_grpc'] = mock_pb2_grpc
-
-from giggityflix_edge.stream_manager import StreamManager
-from giggityflix_edge.message_handler import MessageHandler
 from giggityflix_edge.kafka.producer import KafkaProducer
 from giggityflix_edge.kafka.consumer import KafkaConsumer
 
@@ -83,34 +50,6 @@ def mock_kafka_consumer():
     consumer_mock.start_consuming.return_value = None
     consumer_mock.stop_consuming.return_value = None
     return consumer_mock
-
-
-@pytest.fixture
-def mock_stream_manager(mock_kafka_producer):
-    """Mock StreamManager for testing."""
-    stream_manager = MagicMock(spec=StreamManager)
-    stream_manager.kafka_producer = mock_kafka_producer
-    stream_manager.register_peer.return_value = None
-    stream_manager.unregister_peer = AsyncMock()
-    stream_manager.send_message_to_peer = AsyncMock(return_value=True)
-    stream_manager.is_peer_connected.return_value = True
-    stream_manager.get_connected_peers.return_value = ["test-peer-123"]
-    return stream_manager
-
-
-@pytest.fixture
-def mock_message_handler(mock_stream_manager, mock_kafka_producer):
-    """Mock MessageHandler for testing."""
-    handler = MagicMock(spec=MessageHandler)
-    handler.stream_manager = mock_stream_manager
-    handler.kafka_producer = mock_kafka_producer
-    handler.handle_peer_registration = AsyncMock()
-    handler.handle_file_delete_response = AsyncMock()
-    handler.handle_file_hash_response = AsyncMock()
-    handler.handle_batch_file_offer = AsyncMock()
-    handler.handle_screenshot_capture_response = AsyncMock()
-    handler.handle_edge_command = AsyncMock()
-    return handler
 
 
 # ====== gRPC Test Fixtures ======
